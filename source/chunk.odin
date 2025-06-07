@@ -39,7 +39,16 @@ chunk_get_block_at_position :: proc(chunk: Chunk, x, y, z: int) -> Block {
         fmt.println("Hors de l'array")
         return {.AIR}
     }
-    return chunk.blocks[x + MAX_BLOCKS * z + (MAX_BLOCKS * MAX_BLOCKS) * y];
+    return chunk.blocks[x + MAX_BLOCKS * z + (MAX_BLOCKS * MAX_BLOCKS) * y]
+}
+
+chunk_set_block_at_position :: proc(chunk: ^Chunk, block_type: BlockType, x, y, z: int) {
+    if (x < 0 && x >= MAX_BLOCKS) && (y < 0 && y >= MAX_BLOCKS) && (z < 0 && z >= MAX_BLOCKS) {
+        fmt.println("Hors de l'array")
+        return
+    }
+
+    chunk.blocks[x + MAX_BLOCKS * z + (MAX_BLOCKS * MAX_BLOCKS) * y].type = block_type
 }
 
 chunk_block_is_air :: proc(chunk: Chunk, x, y, z: int) -> bool {

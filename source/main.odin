@@ -128,10 +128,10 @@ state: State
 camera: Camera
 dt: f32 = 0
 main :: proc() {
-    camera = Camera_new(linalg.Vector3f32{0.0, 0.0, 3.0})
+    camera = Camera_new(linalg.Vector3f32{1.0, 1.0, 17.0})
 
     custom_init(); defer custom_end()
-    state.window_handle = window_create(WIN_WIDTH, WIN_HEIGHT, "Odin GL"); defer window_destroy(state.window_handle)
+    state.window_handle = window_create(WIN_WIDTH, WIN_HEIGHT, "Vex"); defer window_destroy(state.window_handle)
     if state.window_handle == nil {
         custom_end()
         panic("Erreur de création de fenêtre !")
@@ -140,7 +140,7 @@ main :: proc() {
     glfw.MakeContextCurrent(state.window_handle)
 
     // https://gist.github.com/SorenSaket/155afe1ec11a79def63341c588ade329
-    gl.load_up_to(int(3), 3, glfw.gl_set_proc_address) // Pour charger les fonctions d'OpenGL.
+    gl.load_up_to(3, 3, glfw.gl_set_proc_address) // Pour charger les fonctions d'OpenGL.
 
     gl.Viewport(0, 0, WIN_WIDTH, WIN_HEIGHT)
     glfw.SetFramebufferSizeCallback(state.window_handle, window_framebuffer_size_callback) // Register the callback function.
@@ -246,10 +246,12 @@ main :: proc() {
 
     chunk: Chunk
     chunk_init_with_dirt(&chunk)
-    chunk_cubes_position := chunk_get_all_blocks_position(chunk)
+
+    for i in 0..<16 {
+        chunk_set_block_at_position(&chunk, .AIR, i, 5, 7)
+    }
 
     vertices := chunk_meshing(chunk)
-
 
     vao: u32
     vbo : [2]u32
@@ -263,6 +265,8 @@ main :: proc() {
     gl.BufferData(gl.ARRAY_BUFFER, size_of(vertices[0]) * len(vertices), raw_data(vertices[:]), gl.STATIC_DRAW)
     gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * size_of(f32), uintptr(0))
     gl.EnableVertexAttribArray(0)
+
+    fmt.println()
 
     // Texture
     // gl.BindBuffer(gl.ARRAY_BUFFER, vbo[1])
