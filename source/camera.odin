@@ -8,6 +8,8 @@ CameraDirection :: enum {
     BACKWARD,
     LEFT,
     RIGHT,
+    UP,
+    DOWN
 }
 
 // Default cam values
@@ -20,9 +22,9 @@ ZOOM: f32 : 45.0
 Camera :: struct {
     // Attributs de la camera
     position: linalg.Vector3f32,
-    front: linalg.Vector3f32,
-    up: linalg.Vector3f32,
-    right: linalg.Vector3f32,
+    front: linalg.Vector3f32, // La face avant de la caméra
+    up: linalg.Vector3f32, // La face haute de la caméra
+    right: linalg.Vector3f32, // La face droite de la caméra
     world_up: linalg.Vector3f32,
 
     // Angles d'Eulers
@@ -69,6 +71,10 @@ Camera_process_keyboard_input :: proc(camera: ^Camera, cam_direction: CameraDire
             camera.position -= camera.right * velocity
         case .RIGHT:
             camera.position += camera.right * velocity
+        case .UP:
+            camera.position += camera.up * velocity
+        case .DOWN:
+            camera.position -= camera.up * velocity
     }
 }
 
