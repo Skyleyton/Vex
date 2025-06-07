@@ -248,7 +248,7 @@ main :: proc() {
     chunk_init_with_dirt(&chunk)
     chunk_cubes_position := chunk_get_all_blocks_position(chunk)
 
-    vertices, textures := chunk_meshing(chunk)
+    vertices := chunk_meshing(chunk)
 
 
     vao: u32
@@ -265,10 +265,10 @@ main :: proc() {
     gl.EnableVertexAttribArray(0)
 
     // Texture
-    gl.BindBuffer(gl.ARRAY_BUFFER, vbo[1])
-    gl.BufferData(gl.ARRAY_BUFFER, size_of(textures[0]) * len(textures), raw_data(textures[:]), gl.STATIC_DRAW)
-    gl.VertexAttribPointer(1, 2, gl.FLOAT, gl.FALSE, 2 * size_of(f32), uintptr(0))
-    gl.EnableVertexAttribArray(1)
+    // gl.BindBuffer(gl.ARRAY_BUFFER, vbo[1])
+    // gl.BufferData(gl.ARRAY_BUFFER, size_of(textures[0]) * len(textures), raw_data(textures[:]), gl.STATIC_DRAW)
+    // gl.VertexAttribPointer(1, 2, gl.FLOAT, gl.FALSE, 2 * size_of(f32), uintptr(0))
+    // gl.EnableVertexAttribArray(1)
 
     // Chargement de la texture.
     texture_id := texture_load_from_file("assets/wall.jpg", .RGB)
