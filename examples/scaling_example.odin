@@ -248,13 +248,13 @@ main :: proc() {
 
     // Position
     gl.BindBuffer(gl.ARRAY_BUFFER, vbo[0])
-    gl.BufferData(gl.ARRAY_BUFFER, size_of(block_vertices[:]) * len(block_vertices), raw_data(block_vertices[:]), gl.STATIC_DRAW)
+    gl.BufferData(gl.ARRAY_BUFFER, size_of(f32) * len(block_vertices), raw_data(block_vertices[:]), gl.STATIC_DRAW)
     gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * size_of(f32), uintptr(0))
     gl.EnableVertexAttribArray(0)
 
     // Texture
     gl.BindBuffer(gl.ARRAY_BUFFER, vbo[1])
-    gl.BufferData(gl.ARRAY_BUFFER, size_of(block_textures[:]) * len(block_textures), raw_data(block_textures[:]), gl.STATIC_DRAW)
+    gl.BufferData(gl.ARRAY_BUFFER, size_of(f32) * len(block_textures), raw_data(block_textures[:]), gl.STATIC_DRAW)
     gl.VertexAttribPointer(1, 2, gl.FLOAT, gl.FALSE, 2 * size_of(f32), uintptr(0))
     gl.EnableVertexAttribArray(1)
 
