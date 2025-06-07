@@ -5,7 +5,7 @@ import "core:fmt"
 MAX_BLOCKS :: 16
 
 Chunk :: struct {
-    blocks: [MAX_BLOCKS][MAX_BLOCKS][MAX_BLOCKS]Block
+    blocks: [MAX_BLOCKS * MAX_BLOCKS * MAX_BLOCKS]Block
 }
 
 // Init le chunk avec de la terre.
@@ -13,7 +13,7 @@ chunk_init_with_dirt :: proc(chunk: ^Chunk) {
     for x := 0; x < MAX_BLOCKS; x += 1 {
         for y := 0; y < MAX_BLOCKS; y += 1 {
             for z := 0; z < MAX_BLOCKS; z += 1 {
-                chunk.blocks[x][y][z].type = .DIRT
+                chunk.blocks[x + MAX_BLOCKS * z + (MAX_BLOCKS * MAX_BLOCKS) * y].type = .DIRT
             }
         }
     }
@@ -37,10 +37,10 @@ chunk_get_all_blocks_position :: proc(chunk: Chunk) -> [][3]f32 {
 chunk_get_block_at_position :: proc(chunk: Chunk, x, y, z: int) -> Block {
     if x >= MAX_BLOCKS || y >= MAX_BLOCKS || z >= MAX_BLOCKS {
         fmt.println("Hors de l'array")
-        return chunk.blocks[MAX_BLOCKS - 1][MAX_BLOCKS - 1][MAX_BLOCKS - 1]
+        return chunk.blocks[(x - 1) + MAX_BLOCKS * (z - 1) + (MAX_BLOCKS * MAX_BLOCKS) * (y - 1)]
     }
 
-    return chunk.blocks[x][y][z];
+    return chunk.blocks[x + MAX_BLOCKS * z + (MAX_BLOCKS * MAX_BLOCKS) * y];
 }
 
 chunk_meshing :: proc(chunk: Chunk) -> ([][3]f32, [][2]f32) {
