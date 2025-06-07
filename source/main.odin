@@ -93,6 +93,12 @@ custom_process_input :: proc(state: ^State, dt: f32) {
     if glfw.GetKey(state.window_handle, glfw.KEY_A) == glfw.PRESS {
         Camera_process_keyboard_input(&camera, .LEFT, dt)
     }
+    if glfw.GetKey(state.window_handle, glfw.KEY_SPACE) == glfw.PRESS {
+        Camera_process_keyboard_input(&camera, .UP, dt)
+    }
+    if glfw.GetKey(state.window_handle, glfw.KEY_LEFT_SHIFT) == glfw.PRESS {
+        Camera_process_keyboard_input(&camera, .DOWN, dt)
+    }
 
     if glfw.GetKey(state.window_handle, glfw.KEY_LEFT_ALT) == glfw.RELEASE {
         glfw.SetInputMode(state.window_handle, glfw.CURSOR, glfw.CURSOR_DISABLED)
@@ -102,7 +108,7 @@ custom_process_input :: proc(state: ^State, dt: f32) {
     }
 
     // test audio
-    if glfw.GetKey(state.window_handle, glfw.KEY_SPACE) == glfw.PRESS && !state.audio_playing {
+    if glfw.GetKey(state.window_handle, glfw.KEY_K) == glfw.PRESS && !state.audio_playing {
         state.audio_playing = true
         ma.engine_play_sound(&state.audio_engine, "assets/Rick_Astley__Never_Gonna_Give_You_Up.mp3", nil)
     }
