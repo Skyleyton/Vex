@@ -43,7 +43,7 @@ chunk_get_block_at_position :: proc(chunk: Chunk, x, y, z: int) -> Block {
     return chunk.blocks[x + MAX_BLOCKS * z + (MAX_BLOCKS * MAX_BLOCKS) * y];
 }
 
-chunk_meshing :: proc(chunk: Chunk) -> ([][3]f32, [][2]f32) {
+chunk_meshing :: proc(chunk: Chunk) -> [][3]f32 {
     block_vertices_template := []f32 {
         -0.5, -0.5, -0.5,
          0.5, -0.5, -0.5,
@@ -144,6 +144,66 @@ chunk_meshing :: proc(chunk: Chunk) -> ([][3]f32, [][2]f32) {
                     // Pas besoin de faire un meshing pour l'air, c'est invisible.
                     continue
                 }
+                
+                // TOP face
+                if chunk_get_block_at_position(chunk, x, y + 1, z).type != .AIR {
+                    v0 := [3]f32{f32(x), f32(y + 1), f32(z)}
+                    v1 := [3]f32{f32(x + 1), f32(y + 1), f32(z)}
+                    v2 := [3]f32{f32(x + 1), f32(y + 1), f32(z + 1)}
+                    v3 := [3]f32{f32(x), f32(y + 1), f32(z + 1)}
+
+                    append(&vertices, v0, v3, v2, v0, v2, v1)
+                }
+                
+                // BOTTOM face
+                if chunk_get_block_at_position(chunk, x, y - 1, z).type != .AIR {
+                    v0 := [3]f32{f32(x), f32(y), f32(z)}
+                    v1 := [3]f32{f32(x + 1), f32(y), f32(z)}
+                    v2 := [3]f32{f32(x + 1), f32(y), f32(z + 1)}
+                    v3 := [3]f32{f32(x), f32(y), f32(z + 1)}
+
+                    append(&vertices, v0, v3, v2, v0, v2, v1)
+                }
+
+                // RIGHT face
+                if chunk_get_block_at_position(chunk, x + 1, y, z).type != .AIR {
+                    v0 := [3]f32{f32(x + 1), f32(y), f32(z)}
+                    v1 := [3]f32{f32(x + 1), f32(y + 1), f32(z)}
+                    v2 := [3]f32{f32(x + 1), f32(y + 1), f32(z + 1)}
+                    v3 := [3]f32{f32(x + 1), f32(y), f32(z + 1)}
+
+                    append(&vertices, v0, v1, v2, v0, v2, v3)
+                }
+
+                // LEFT face
+                if chunk_get_block_at_position(chunk, x - 1, y, z).type != .AIR {
+                    v0 := [3]f32{f32(x), f32(y), f32(z)}
+                    v1 := [3]f32{f32(x), f32(y), f32(z + 1)}
+                    v2 := [3]f32{f32(x), f32(y + 1), f32(z + 1)}
+                    v3 := [3]f32{f32(x), f32(y + 1), f32(z)}
+
+                    append(&vertices, v0, v1, v2, v0, v2, v3)
+                }
+
+                // FRONT face
+                if chunk_get_block_at_position(chunk, x, y, z + 1).type != .AIR {
+                    v0 := [3]f32{f32(x), f32(y), f32(z + 1)}
+                    v1 := [3]f32{f32(x + 1), f32(y), f32(z + 1)}
+                    v2 := [3]f32{f32(x + 1), f32(y + 1), f32(z + 1)}
+                    v3 := [3]f32{f32(x), f32(y + 1), f32(z + 1)}
+
+                    append(&vertices, v0, v1, v2, v0, v2, v3)
+                }
+
+                // BACK face
+                if chunk_get_block_at_position(chunk, x, y, z - 1).type != .AIR {
+                    v0 := [3]f32{f32(x), f32(y), f32(z)}
+                    v1 := [3]f32{f32(x + 1), f32(y), f32(z)}
+                    v2 := [3]f32{f32(x + 1), f32(y + 1), f32(z)}
+                    v3 := [3]f32{f32(x), f32(y + 1), f32(z)}
+
+                    append(&vertices, v0, v1, v2, v0, v2, v3)
+                }
 
                 for i := 0; i < len(block_vertices_template) / 3; i += 1 {
                     vx: f32 = block_vertices_template[i * 3 + 0]
@@ -157,13 +217,12 @@ chunk_meshing :: proc(chunk: Chunk) -> ([][3]f32, [][2]f32) {
                     texture := [2]f32 {u, v}
 
                     append(&vertices, triangle)
-                    append(&textures, texture)
                 }
             }
         }
     }
 
-    return vertices[:], textures[:]
+    return vertices[:]
 }
 
 // Fais un render du chunk.
