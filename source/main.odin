@@ -325,6 +325,7 @@ main :: proc() {
 
         model_mat := linalg.MATRIX4F32_IDENTITY
         model_mat = linalg.matrix4_translate_f32({0.0, 0.0, 0.0})
+        // model_mat = linalg.matrix4_scale_f32({0.25, 0.25, 0.25})
         model_loc := ShaderData_get_uniform_location(shader_data, "model")
         ShaderData_set_uniform_mat(shader_data, model_loc, model_mat)
 
