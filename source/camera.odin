@@ -72,9 +72,9 @@ Camera_process_keyboard_input :: proc(camera: ^Camera, cam_direction: CameraDire
         case .RIGHT:
             camera.position += camera.right * velocity
         case .UP:
-            camera.position += camera.up * velocity
+            camera.position.y += velocity
         case .DOWN:
-            camera.position -= camera.up * velocity
+            camera.position.y -= velocity
     }
 }
 
